@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 function FacebookLogin() {
     useEffect(() => {
         // Initialize the Facebook SDK
-        console.log('Initializing Facebook SDK', process.env.REACT_APP_FACEBOOK_APP_ID)
+        // console.log('Initializing Facebook SDK', process.env.REACT_APP_FACEBOOK_APP_ID)
         // window.fbAsyncInit = function() {
         //     window.FB.init({
         //         appId: process.env.REACT_APP_FACEBOOK_APP_ID, 
