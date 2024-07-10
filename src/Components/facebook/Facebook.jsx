@@ -1,49 +1,43 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import FacebookLogin from 'react-facebook-login';
+import axios from 'axios'
 
-function FacebookLogin() {
-    useEffect(() => {
-        // Load the Facebook SDK asynchronously
-        (function(d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) { return; }
-            js = d.createElement(s); js.id = id;
-            js.src = "https://connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
+const Login = () => {
+    const [user, setUser] = useState()
+    const [pages, setPages] = useState([])
+    const navigate = useNavigate();
 
-        // Initialize the Facebook SDK after it has loaded
-        window.fbAsyncInit = function() {
-            window.FB.init({
-                appId: process.env.REACT_APP_FACEBOOK_APP_ID,// Replace with your Facebook app ID
-                cookie: true,
-                xfbml: true,
-                version: 'v2.7' // Ensure this is a valid version
-            });
 
-            window.FB.AppEvents.logPageView();
-        };
-    }, []);
-
-    const handleFBLogin = () => {
-        window.FB.login(function(response) {
-            if (response.authResponse) {
-                console.log('Welcome! Fetching your information.... ');
-                window.FB.api('/me', { fields: 'name,email' }, function(response) {
-                    console.log('Good to see you, ' + response.name + '.');
-                    console.log('Your email is ' + response.email);
-                });
-            } else {
-                console.log('User cancelled login or did not fully authorize.');
-            }
-        }, { scope: 'public_profile,email' });
+    const getPages = async () => {
+        const response = await axios.get(`https://graph.facebook.com/me/accounts?access_token=${user.data.accessToken}`)
+        console.log(response.data.data)
+        setPages(response.data.data)
+    }
+    const responseFacebook = (response) => {
+        // setUserData(response);
+        setUser({ data: response })
+        console.log(response);
+        // navigate('/profile');
     };
 
     return (
-        <div>
-            <h1>Facebook Login Example</h1>
-            <button onClick={handleFBLogin}>Login with Facebook</button>
+        <div className='flex items-center justify-center min-h-screen'>
+            <div className='flex flex-col items-center justify-center'>
+                <h2>Login with Facebook</h2>
+                <FacebookLogin
+                    appId={process.env.REACT_APP_FACEBOOK_APP_ID}
+                    autoLoad={true}
+                    fields="name,email,picture"
+                    callback={responseFacebook}
+                    scope="pages_show_list"
+                    icon="fa-facebook"
+                />
+            </div>
+
+            <button onClick={getPages}>Click Me</button>
         </div>
     );
-}
+};
 
-export default FacebookLogin;
+export default Login;
