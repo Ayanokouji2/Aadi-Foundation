@@ -20,7 +20,7 @@ function FacebookLogin() {
             var js, fjs = d.getElementsByTagName(s)[0];
             if (d.getElementById(id)) { return; }
             js = d.createElement(s); js.id = id;
-            js.src = `https://connect.facebook.net/en_US/sdk.js#version=v2.2&appId=${process.env.REACT_APP_FACEBOOK_APP_ID}&xfbml=true&autoLogAppEvents=true`;
+            js.src = `https://connect.facebook.net/en_US/sdk.js#version=v3.2&appId=${process.env.REACT_APP_FACEBOOK_APP_ID}&xfbml=true&autoLogAppEvents=true`;
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
     }, []);
