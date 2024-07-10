@@ -2,41 +2,40 @@ import React, { useEffect } from 'react';
 
 function FacebookLogin() {
     useEffect(() => {
-        // Initialize the Facebook SDK
-        console.log('Initializing Facebook SDK', process.env.REACT_APP_FACEBOOK_APP_ID)
+        // Load the Facebook SDK asynchronously
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) { return; }
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+        // Initialize the Facebook SDK after it has loaded
         window.fbAsyncInit = function() {
             window.FB.init({
-                appId: process.env.REACT_APP_FACEBOOK_APP_ID, 
+                appId: process.env.REACT_APP_FACEBOOK_APP_ID,// Replace with your Facebook app ID
                 cookie: true,
                 xfbml: true,
-                version: 'v8.0'
+                version: 'v12.0' // Ensure this is a valid version
             });
 
             window.FB.AppEvents.logPageView();
         };
-
-        // Load the SDK asynchronously
-        (async function(d, s, id){
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) {return;}
-            js = d.createElement(s); js.id = id;
-            js.src = "https://connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-          }(document, 'script', 'facebook-jssdk')
-);
     }, []);
 
     const handleFBLogin = () => {
         window.FB.login(function(response) {
             if (response.authResponse) {
                 console.log('Welcome! Fetching your information.... ');
-                window.FB.api('/me', function(response) {
+                window.FB.api('/me', { fields: 'name,email' }, function(response) {
                     console.log('Good to see you, ' + response.name + '.');
+                    console.log('Your email is ' + response.email);
                 });
             } else {
                 console.log('User cancelled login or did not fully authorize.');
             }
-        }, {scope: 'public_profile,email'});
+        }, { scope: 'public_profile,email' });
     };
 
     return (
