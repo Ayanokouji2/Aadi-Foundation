@@ -9,7 +9,7 @@ function FacebookLogin() {
                 appId: process.env.REACT_APP_FACEBOOK_APP_ID, 
                 cookie: true,
                 xfbml: true,
-                version: 'v12.0'
+                version: 'v8.0'
             });
 
             window.FB.AppEvents.logPageView();
