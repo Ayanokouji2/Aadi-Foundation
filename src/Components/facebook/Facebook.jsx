@@ -17,7 +17,7 @@ function FacebookLogin() {
                 appId: process.env.REACT_APP_FACEBOOK_APP_ID,// Replace with your Facebook app ID
                 cookie: true,
                 xfbml: true,
-                version: 'v12.0' // Ensure this is a valid version
+                version: 'v2.7' // Ensure this is a valid version
             });
 
             window.FB.AppEvents.logPageView();
